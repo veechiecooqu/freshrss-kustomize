@@ -1,0 +1,2 @@
+[language-server.yaml-language-server.config.yaml.schemas]
+"Kubernetes" = "../prefixes.yaml"

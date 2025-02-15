@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: freshrss-config
+data:
+  BASE_URL: https://BASE_URL/freshrss
+  CRON_MIN: 1,31
+  TRUSTED_PROXY: 10.42.0.0/16 fd42:cafe:42::/56
+  TZ: Asia/Kolkata
