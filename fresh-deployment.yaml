@@ -1,4 +1,3 @@
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,9 +8,9 @@ metadata:
 spec:
   ipFamilyPolicy: PreferDualStack
   ports:
-  - name: http-entrypoint
-    port: 80
-    targetPort: 80
+    - name: http-entrypoint
+      port: 80
+      targetPort: 80
   selector:
     app: freshrss
 ---
@@ -22,7 +21,7 @@ metadata:
   labels:
     app: freshrss
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: freshrss
@@ -32,39 +31,39 @@ spec:
         app: freshrss
     spec:
       containers:
-      - args:
-        - /bin/bash
-        - -o
-        - pipefail
-        - -c
-        - "([ -z \"$CRON_MIN\" ] || cron) && \t. /etc/apache2/envvars && \texec apache2
-          -D FOREGROUND $([ -n \"$OIDC_ENABLED\" ] && [ \"$OIDC_ENABLED\" -ne 0 ] && echo
-          '-D OIDC_ENABLED')"
-        envFrom:
-          - configMapRef:
-              name: freshrss-config
-        image: ghcr.io/veechiecooqu/freshrss-kustomize:main
-        name: freshrss
-        ports:
-        - containerPort: 80
-        volumeMounts:
-        - mountPath: /var/www/FreshRSS/extensions
-          name: freshrss-extensions-pvc
-        - mountPath: /var/www/FreshRSS/data
-          name: freshrss-data-pvc
-        - mountPath: /etc/php/8.2/apache2/conf.d/20-memcached.ini
-          name: ini-config
-          subPath: 20-memcached.ini
+        - args:
+            - /bin/bash
+            - -o
+            - pipefail
+            - -c
+            - "([ -z \"$CRON_MIN\" ] || cron) && . /etc/apache2/envvars && exec apache2
+              -D FOREGROUND $([ -n \"$OIDC_ENABLED\" ] && [ \"$OIDC_ENABLED\" -ne
+              0 ] && echo '-D OIDC_ENABLED')"
+          envFrom:
+            - configMapRef:
+                name: freshrss-config
+          image: ghcr.io/veechiecooqu/freshrss-kustomize:main
+          name: freshrss
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /var/www/FreshRSS/extensions
+              name: freshrss-extensions-pvc
+            - mountPath: /var/www/FreshRSS/data
+              name: freshrss-data-pvc
+            - mountPath: /etc/php/8.2/apache2/conf.d/20-memcached.ini
+              name: ini-config
+              subPath: 20-memcached.ini
       volumes:
-      - name: freshrss-extensions-pvc
-        persistentVolumeClaim:
-          claimName: freshrss-extensions
-      - name: freshrss-data-pvc
-        persistentVolumeClaim:
-          claimName: freshrss-data
-      - name: ini-config
-        configMap:
-          name: php-ini-config
-          # items:
-          #   - key: 20-memcached.ini
-          #     path: 20-memcached.ini
+        - name: freshrss-extensions-pvc
+          persistentVolumeClaim:
+            claimName: freshrss-extensions
+        - name: freshrss-data-pvc
+          persistentVolumeClaim:
+            claimName: freshrss-data
+        - name: ini-config
+          configMap:
+            name: php-ini-config
+            # items:
+            #   - key: 20-memcached.ini
+            #     path: 20-memcached.ini

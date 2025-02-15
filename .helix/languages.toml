@@ -1,2 +1,9 @@
 [language-server.yaml-language-server.config.yaml.schemas]
-"Kubernetes" = "../prefixes.yaml"
+"Kubernetes" = [
+  "database.yaml",
+  "fresh-deployment.yaml",
+  "freshrss-config.yaml",
+  "httproute.yaml",
+  "prefixes.yaml",
+  "volumes.yaml",
+]
