@@ -4,9 +4,9 @@ resources:
   - fresh-deployment.yaml
   - httproute.yaml
   - prefixes.yaml
-  - volumes.yaml
   - freshrss-config.yaml
   - database.yaml
+  - volumeclaims.yaml
 configMapGenerator:
   - files:
       - 20-memcached.ini
